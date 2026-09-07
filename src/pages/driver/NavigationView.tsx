@@ -236,59 +236,59 @@ export function NavigationView() {
         </div>
 
         {/* Tactical Nav info panel */}
-        <div className="w-full lg:w-80 border-l border-[#e4e4e3] bg-white overflow-y-auto shrink-0 flex flex-col">
+        <div className="w-full lg:w-96 xl:w-[410px] border-l border-[#e4e4e7] bg-white overflow-y-auto shrink-0 flex flex-col divide-y divide-[#e4e4e7]">
           {/* ETA & distance banner */}
-          <div className="px-4 py-3.5 border-b border-[#e4e4e3] bg-[#fafaf9]">
-            <p className="text-[10px] font-bold text-[#8a8a87] uppercase tracking-wider mb-2">Live Trip Telemetry</p>
-            <div className="grid grid-cols-2 gap-3">
-              <div className="p-2.5 rounded-lg bg-white border border-[#e4e4e3]">
-                <div className="flex items-center gap-1.5 mb-0.5">
-                  <Clock className="w-3.5 h-3.5 text-[#2563eb]" />
-                  <span className="text-[10px] text-[#8a8a87] font-medium">Estimated ETA</span>
+          <div className="p-5 bg-[#fafafa]">
+            <p className="text-xs font-bold text-[#71717a] uppercase tracking-wider mb-2.5">Live Trip Telemetry</p>
+            <div className="grid grid-cols-2 gap-3.5">
+              <div className="p-3.5 rounded-2xl bg-white border border-[#e4e4e7] shadow-xs">
+                <div className="flex items-center gap-1.5 mb-1">
+                  <Clock className="w-4 h-4 text-blue-600" />
+                  <span className="text-xs text-[#71717a] font-bold">Estimated ETA</span>
                 </div>
-                <p className="text-xl font-bold text-[#1a1a19] tabular-nums">
+                <p className="text-2xl font-extrabold text-[#18181b] tracking-tight tabular-nums">
                   {formatEta(displayEta)}
                 </p>
                 {driverRerouted && (
-                  <p className="text-[10px] text-[#2563eb] font-semibold mt-0.5">Detour adjusted</p>
+                  <p className="text-xs text-blue-700 font-bold mt-1">Detour adjusted</p>
                 )}
               </div>
-              <div className="p-2.5 rounded-lg bg-white border border-[#e4e4e3]">
-                <div className="flex items-center gap-1.5 mb-0.5">
-                  <MapPin className="w-3.5 h-3.5 text-[#16a34a]" />
-                  <span className="text-[10px] text-[#8a8a87] font-medium">Distance</span>
+              <div className="p-3.5 rounded-2xl bg-white border border-[#e4e4e7] shadow-xs">
+                <div className="flex items-center gap-1.5 mb-1">
+                  <MapPin className="w-4 h-4 text-emerald-600" />
+                  <span className="text-xs text-[#71717a] font-bold">Distance</span>
                 </div>
-                <p className="text-xl font-bold text-[#1a1a19] tabular-nums">
+                <p className="text-2xl font-extrabold text-[#18181b] tracking-tight tabular-nums">
                   {activeRoute.distanceKm} km
                 </p>
-                <p className="text-[10px] text-[#8a8a87] mt-0.5">Mountain Highway</p>
+                <p className="text-xs text-[#71717a] font-medium mt-1">Mountain Corridor</p>
               </div>
             </div>
           </div>
 
           {/* Tactical Alerts & Action Trigger */}
-          <div className="px-4 py-3.5 border-b border-[#e4e4e3] flex-1">
-            <p className="text-[10px] font-bold text-[#8a8a87] uppercase tracking-wider mb-2">Corridor Conditions & Actions</p>
-            <div className="space-y-2.5">
+          <div className="p-5 flex-1 space-y-3">
+            <p className="text-xs font-bold text-[#71717a] uppercase tracking-wider">Corridor Conditions & Actions</p>
+            <div className="space-y-3">
               {/* Direct Driver Reroute Action Card */}
               {isDriverDisrupted && !driverRerouted && (
-                <div className="p-3 rounded-lg bg-[#fef2f2] border border-[#fca5a5] space-y-2">
-                  <div className="flex items-start gap-2">
-                    <AlertTriangle className="w-4 h-4 text-[#dc2626] shrink-0 mt-0.5" />
+                <div className="p-4 rounded-2xl bg-rose-50 border-2 border-rose-300 shadow-sm space-y-3">
+                  <div className="flex items-start gap-2.5">
+                    <AlertTriangle className="w-5 h-5 text-rose-600 shrink-0 mt-0.5" />
                     <div>
-                      <p className="text-xs font-bold text-[#991b1b]">Road Disruption Ahead</p>
-                      <p className="text-[11px] text-[#7f1d1d] mt-0.5">
+                      <p className="text-sm font-bold text-rose-950">Road Disruption Ahead</p>
+                      <p className="text-xs text-rose-900 mt-1 font-medium">
                         {driverVehicle?.impactReason || 'Corridor blocked by incident ahead. Alternate route is ready.'}
                       </p>
                     </div>
                   </div>
                   <Button
-                    size="sm"
+                    size="md"
                     variant="primary"
-                    className="w-full text-xs bg-[#dc2626] hover:bg-[#b91c1c] text-white"
+                    className="w-full text-xs font-bold bg-rose-600 hover:bg-rose-700 text-white min-h-[44px] cursor-pointer shadow-xs"
                     onClick={handleStartReroute}
                     disabled={reroutingInProgress}
-                    iconLeft={reroutingInProgress ? <RotateCw className="w-3.5 h-3.5 animate-spin" /> : <Navigation className="w-3.5 h-3.5" />}
+                    iconLeft={reroutingInProgress ? <RotateCw className="w-4 h-4 animate-spin" /> : <Navigation className="w-4 h-4" />}
                   >
                     {reroutingInProgress ? 'Calculating...' : 'Start Reroute from Current Position'}
                   </Button>
@@ -314,7 +314,7 @@ export function NavigationView() {
               )}
 
               {emergencyVehicle && emergencyVehicle.rerouteStatus === 'no_alternative' && !emergencyRequest && emergencyVehicle.recommendedGodownId && (
-                <div className="space-y-2 p-3 rounded-lg bg-[#fff7ed] border border-[#fed7aa]">
+                <div className="space-y-3 p-4 rounded-2xl bg-amber-50 border-2 border-amber-300 shadow-sm">
                   <Notification
                     type="error"
                     title="Emergency Supply Continuity"
@@ -322,11 +322,11 @@ export function NavigationView() {
                     visible
                   />
                   <Button
-                    size="sm"
+                    size="md"
                     variant="danger"
-                    className="w-full"
+                    className="w-full font-bold min-h-[44px] cursor-pointer"
                     onClick={() => requestEmergencyPickup(emergencyVehicle.id)}
-                    iconLeft={<Warehouse className="w-3.5 h-3.5" />}
+                    iconLeft={<Warehouse className="w-4 h-4" />}
                   >
                     Request Emergency Pickup
                   </Button>
@@ -365,18 +365,18 @@ export function NavigationView() {
           </div>
 
           {/* Offline Status checklist */}
-          <div className="px-4 py-3 border-b border-[#e4e4e3] bg-[#fafaf9]">
-            <p className="text-[10px] font-bold text-[#8a8a87] uppercase tracking-wider mb-2">Offline Field Readiness</p>
-            <div className="space-y-1.5">
+          <div className="p-5 bg-[#fafafa]">
+            <p className="text-xs font-bold text-[#71717a] uppercase tracking-wider mb-2.5">Offline Field Readiness</p>
+            <div className="space-y-2">
               {[
                 { label: 'Corridor vector cached', available: true },
                 { label: 'Base map tiles', available: true },
                 { label: 'Offline hazard storage (IDB)', available: true },
                 { label: 'SDMA cloud link', available: networkStatus === 'online' },
               ].map((item) => (
-                <div key={item.label} className="flex items-center justify-between text-xs">
-                  <span className="text-[#5a5a57]">{item.label}</span>
-                  <span className={item.available ? 'text-[#16a34a] font-semibold' : 'text-[#dc2626] font-semibold'}>
+                <div key={item.label} className="flex items-center justify-between text-xs font-medium">
+                  <span className="text-[#52525b]">{item.label}</span>
+                  <span className={item.available ? 'text-emerald-700 font-bold' : 'text-rose-700 font-bold'}>
                     {item.available ? '✓ Ready' : '✗ Offline'}
                   </span>
                 </div>
@@ -385,20 +385,20 @@ export function NavigationView() {
           </div>
 
           {/* Action Dock */}
-          <div className="p-4 space-y-2 bg-white">
+          <div className="p-5 space-y-3 bg-white">
             <Button
               variant="danger"
-              size="sm"
-              className="w-full text-xs"
+              size="md"
+              className="w-full text-xs font-bold min-h-[44px] cursor-pointer shadow-xs"
               onClick={() => navigate('/driver/report')}
-              iconLeft={<AlertTriangle className="w-3.5 h-3.5" />}
+              iconLeft={<AlertTriangle className="w-4 h-4" />}
             >
               Report Hazard from Field
             </Button>
             <Button
               variant="outline"
-              size="sm"
-              className="w-full text-xs"
+              size="md"
+              className="w-full text-xs font-bold min-h-[44px] cursor-pointer border-[#e4e4e7] hover:bg-zinc-50 text-[#18181b]"
               onClick={() => {
                 useAppStore.getState().setTripState({ isJourneyActive: false, activeTripId: null, selectedRouteId: null, isOfflineReady: false });
                 navigate('/driver');

@@ -185,23 +185,23 @@ export function Sidebar() {
           style={{ width: 232 }}
         >
           {/* Role Header Indicator */}
-          <div className="px-4 py-3 border-b border-[#e4e4e3] bg-[#fafaf9]">
-            <span className="text-[10px] font-bold text-[#8a8a87] uppercase tracking-wider">
-              {currentMeta.tag} Workspace
+          <div className="px-4 py-3.5 border-b border-[#e5e5e4] bg-[#fafafa]">
+            <span className="text-[10px] font-bold text-[#71717a] uppercase tracking-wider">
+              {currentMeta.tag}
             </span>
-            <p className="text-xs font-semibold text-[#1a1a19] truncate mt-0.5">
+            <p className="text-xs font-bold text-[#18181b] truncate mt-0.5">
               {currentMeta.label}
             </p>
-            <p className="text-[11px] text-[#8a8a87] truncate">
+            <p className="text-[11px] text-[#71717a] truncate font-medium">
               {currentMeta.sub}
             </p>
           </div>
 
           {/* Grouped Navigation */}
-          <nav className="flex-1 py-3 px-2 overflow-y-auto space-y-4">
+          <nav className="flex-1 py-3 px-2.5 overflow-y-auto space-y-4">
             {navGroups.map((group) => (
               <div key={group.title} className="space-y-1">
-                <p className="px-2.5 text-[10px] font-bold text-[#a1a19f] uppercase tracking-wider">
+                <p className="px-2.5 text-[10px] font-bold text-[#a1a1aa] uppercase tracking-wider">
                   {group.title}
                 </p>
 
@@ -218,16 +218,16 @@ export function Sidebar() {
                         to={item.to}
                         end={item.to === `/${role}` || item.to === `/${role}/`}
                         className={cn(
-                          'group flex items-center justify-between px-2.5 py-2 rounded-lg text-xs font-medium transition-colors cursor-pointer',
+                          'group flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer select-none',
                           isActive
                             ? role === 'driver'
-                              ? 'bg-[#eff6ff] text-[#1e40af] font-semibold'
+                              ? 'bg-blue-50 text-blue-900 border border-blue-200 shadow-2xs'
                               : role === 'dispatcher'
-                                ? 'bg-[#fff7ed] text-[#9a3412] font-semibold'
+                                ? 'bg-orange-50 text-orange-950 border border-orange-200 shadow-2xs'
                                 : role === 'sdma'
-                                  ? 'bg-[#f0fdf4] text-[#166534] font-semibold'
-                                  : 'bg-[#fdf4ff] text-[#86198f] font-semibold'
-                            : 'text-[#5a5a57] hover:bg-[#f4f4f3] hover:text-[#1a1a19]'
+                                  ? 'bg-emerald-50 text-emerald-950 border border-emerald-200 shadow-2xs'
+                                  : 'bg-purple-50 text-purple-950 border border-purple-200 shadow-2xs'
+                            : 'text-[#52525b] hover:bg-[#f4f4f5] hover:text-[#18181b]'
                         )}
                       >
                         <div className="flex items-center gap-2.5 min-w-0">
@@ -236,13 +236,13 @@ export function Sidebar() {
                               'shrink-0 transition-colors',
                               isActive
                                 ? role === 'driver'
-                                  ? 'text-[#2563eb]'
+                                  ? 'text-blue-700'
                                   : role === 'dispatcher'
-                                    ? 'text-[#ea580c]'
+                                    ? 'text-orange-700'
                                     : role === 'sdma'
-                                      ? 'text-[#16a34a]'
-                                      : 'text-[#86198f]'
-                                : 'text-[#8a8a87] group-hover:text-[#1a1a19]'
+                                      ? 'text-emerald-700'
+                                      : 'text-purple-700'
+                                : 'text-[#71717a] group-hover:text-[#18181b]'
                             )}
                           >
                             {item.icon}
@@ -253,12 +253,12 @@ export function Sidebar() {
                         {item.badge !== undefined && (
                           <span
                             className={cn(
-                              'px-1.5 py-0.5 rounded-full text-[10px] font-bold leading-none shrink-0 ml-1.5',
+                              'px-1.5 py-0.5 rounded-md text-[10px] font-bold leading-none shrink-0 ml-1.5 shadow-2xs',
                               item.badgeVariant === 'danger'
-                                ? 'bg-[#dc2626] text-white'
+                                ? 'bg-rose-600 text-white'
                                 : item.badgeVariant === 'warning'
-                                  ? 'bg-[#d97706] text-white'
-                                  : 'bg-[#2563eb] text-white'
+                                  ? 'bg-amber-600 text-white'
+                                  : 'bg-blue-600 text-white'
                             )}
                           >
                             {item.badge}
@@ -273,11 +273,11 @@ export function Sidebar() {
           </nav>
 
           {/* Clean Bottom Status */}
-          <div className="px-3.5 py-2.5 border-t border-[#e4e4e3] bg-[#fafaf9] flex items-center justify-between text-[11px]">
-            <span className="text-[#8a8a87]">Platform Core</span>
-            <span className="text-[#16a34a] font-medium flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#16a34a] animate-pulse" />
-              Operational
+          <div className="px-3.5 py-2.5 border-t border-[#e5e5e4] bg-[#fafafa] flex items-center justify-between text-[11px]">
+            <span className="text-[#71717a]">Corridor Grid</span>
+            <span className="text-emerald-700 font-semibold flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse" />
+              Live Online
             </span>
           </div>
         </motion.aside>

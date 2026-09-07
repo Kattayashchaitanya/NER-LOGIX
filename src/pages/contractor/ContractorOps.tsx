@@ -91,79 +91,79 @@ export function ContractorOps() {
         </div>
 
         {/* Right Operations Panel */}
-        <div className="w-full lg:w-96 border-l border-[#e4e4e3] bg-white overflow-y-auto shrink-0 flex flex-col divide-y divide-[#e4e4e3]">
+        <div className="w-full lg:w-[420px] xl:w-[460px] border-l border-[#e4e4e7] bg-white overflow-y-auto shrink-0 flex flex-col divide-y divide-[#e4e4e7]">
           {/* Emergency Pickup Queue */}
-          <div className="p-4 bg-[#fafaf9]">
+          <div className="p-5 bg-[#fafafa]">
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-2">
-                <Truck className="w-4 h-4 text-[#86198f]" />
-                <h2 className="text-xs font-bold text-[#1a1a19] uppercase tracking-wider">
+                <Truck className="w-5 h-5 text-purple-700" />
+                <h2 className="text-xs font-bold text-[#18181b] uppercase tracking-wider">
                   Emergency Pickup Queue
                 </h2>
               </div>
-              <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#f3e8ff] text-[#7e22ce]">
+              <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-purple-100 text-purple-900 border border-purple-200">
                 {pendingPickups.length} Pending
               </span>
             </div>
 
             {pendingPickups.length > 0 ? (
-              <div className="space-y-3">
+              <div className="space-y-3.5">
                 {pendingPickups.map((req) => {
                   const targetGodown = godowns.find((g) => g.id === req.godownId);
                   const vehicle = activeVehicles.find((v) => v.id === req.vehicleId);
                   return (
                     <div
                       key={req.id}
-                      className="p-3.5 rounded-xl bg-white border border-[#f5d0fe] shadow-xs space-y-2.5"
+                      className="p-4 rounded-2xl bg-white border-2 border-purple-200 shadow-xs space-y-3"
                     >
                       <div className="flex items-start justify-between">
                         <div>
-                          <div className="flex items-center gap-1.5">
-                            <span className="text-xs font-bold text-[#1a1a19]">{req.vehicleId}</span>
-                            <span className="text-[11px] text-[#5a5a57]">· {req.driverName}</span>
+                          <div className="flex items-center gap-2">
+                            <span className="text-sm font-bold text-[#18181b]">{req.vehicleId}</span>
+                            <span className="text-xs text-[#52525b] font-medium">({req.driverName})</span>
                           </div>
-                          <p className="text-[11px] text-[#7e22ce] font-medium mt-0.5">
+                          <p className="text-xs text-purple-800 font-bold mt-0.5">
                             Cargo: {req.cargoType}
                           </p>
                         </div>
                         <StatusBadge label="Pickup Requested" variant="warning" pulse />
                       </div>
 
-                      <div className="p-2.5 rounded-lg bg-[#fdf4ff] border border-[#fae8ff] text-xs space-y-1.5">
-                        <div className="flex items-center justify-between text-[#5a5a57]">
-                          <span>Transit Route:</span>
-                          <span className="font-semibold text-[#1a1a19]">
+                      <div className="p-3 rounded-xl bg-purple-50/70 border border-purple-200 text-xs space-y-2 text-purple-950 font-medium">
+                        <div className="flex items-center justify-between">
+                          <span className="text-[#71717a]">Transit Route:</span>
+                          <span className="font-bold text-[#18181b]">
                             {vehicle?.origin || 'Guwahati'} → {req.destination}
                           </span>
                         </div>
-                        <div className="flex items-center justify-between text-[#5a5a57]">
-                          <span>Designated Godown:</span>
-                          <span className="font-semibold text-[#1a1a19]">{req.godownName}</span>
+                        <div className="flex items-center justify-between">
+                          <span className="text-[#71717a]">Designated Godown:</span>
+                          <span className="font-bold text-[#18181b]">{req.godownName}</span>
                         </div>
-                        <div className="flex items-center justify-between text-[#5a5a57]">
-                          <span>Available Godown Stock:</span>
-                          <span className="font-semibold text-[#16a34a]">{targetGodown?.availableStock ?? 120} units</span>
+                        <div className="flex items-center justify-between">
+                          <span className="text-[#71717a]">Available Buffer Stock:</span>
+                          <span className="font-bold text-emerald-700">{targetGodown?.availableStock ?? 120} units</span>
                         </div>
-                        <div className="flex items-center justify-between text-[#5a5a57] border-t border-[#f5d0fe] pt-1">
-                          <span>Requested Buffer Allocation:</span>
-                          <span className="font-bold text-[#7e22ce]">{req.quantity} units</span>
+                        <div className="flex items-center justify-between border-t border-purple-200 pt-1.5">
+                          <span className="font-bold text-purple-950">Requested Buffer Allocation:</span>
+                          <span className="font-extrabold text-purple-900 text-sm">{req.quantity} units</span>
                         </div>
                       </div>
 
-                      <div className="flex items-center gap-2 pt-1">
+                      <div className="flex items-center gap-2.5 pt-1">
                         <Button
-                          size="sm"
+                          size="md"
                           variant="primary"
-                          className="flex-1 bg-[#86198f] hover:bg-[#701a75] text-white text-xs font-bold cursor-pointer shadow-xs"
+                          className="flex-1 bg-purple-700 hover:bg-purple-800 text-white text-xs font-bold cursor-pointer shadow-xs min-h-[44px]"
                           onClick={() => approveEmergencyPickup(req.id)}
-                          iconLeft={<CheckCircle2 className="w-3.5 h-3.5" />}
+                          iconLeft={<CheckCircle2 className="w-4 h-4" />}
                         >
-                          Approve Emergency Pickup
+                          Approve Emergency Storage
                         </Button>
                         <Button
-                          size="sm"
+                          size="md"
                           variant="outline"
-                          className="text-xs border-[#e4e4e3] hover:bg-[#fef2f2] hover:text-[#dc2626] cursor-pointer"
+                          className="text-xs font-bold border-zinc-300 hover:bg-rose-50 hover:text-rose-700 hover:border-rose-300 cursor-pointer min-h-[44px] px-4"
                           onClick={() => declineEmergencyPickup(req.id)}
                         >
                           Decline
@@ -174,16 +174,18 @@ export function ContractorOps() {
                 })}
               </div>
             ) : (
-              <div className="p-4 rounded-xl bg-white border border-[#e4e4e3] text-center space-y-2">
-                <CheckCircle2 className="w-6 h-6 text-[#16a34a] mx-auto" />
-                <p className="text-xs font-semibold text-[#1a1a19]">No Pending Emergency Pickups</p>
-                <p className="text-[11px] text-[#8a8a87]">
+              <div className="p-6 rounded-2xl bg-white border border-[#e4e4e7] text-center space-y-2.5">
+                <div className="w-10 h-10 rounded-full bg-emerald-50 border border-emerald-200 flex items-center justify-center mx-auto mb-1">
+                  <CheckCircle2 className="w-5 h-5 text-emerald-600" />
+                </div>
+                <p className="text-sm font-bold text-[#18181b]">No Pending Emergency Pickups</p>
+                <p className="text-xs text-[#71717a] font-medium">
                   All regional godowns operating at normal buffer capacity.
                 </p>
                 <Button
                   size="sm"
                   variant="outline"
-                  className="text-xs text-[#86198f] border-[#f5d0fe] bg-[#fdf4ff] hover:bg-[#fae8ff] mt-1"
+                  className="text-xs font-bold text-purple-700 border-purple-200 bg-purple-50 hover:bg-purple-100 mt-2"
                   onClick={() => {
                     useNetworkStore.getState().requestEmergencyPickup('NL-02-C-3391');
                   }}
@@ -196,24 +198,26 @@ export function ContractorOps() {
 
           {/* Active Secured Allocations */}
           {securedPickups.length > 0 && (
-            <div className="p-4 bg-white border-t border-[#e4e4e3] space-y-2.5">
+            <div className="p-5 bg-white space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-[10px] font-bold text-[#8a8a87] uppercase tracking-wider">
+                <span className="text-xs font-bold text-[#71717a] uppercase tracking-wider">
                   Active Buffer Allocations ({securedPickups.length})
                 </span>
-                <span className="text-[10px] text-[#16a34a] font-semibold">Stock Decremented</span>
+                <span className="text-xs text-emerald-700 font-bold bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                  Stock Reserved
+                </span>
               </div>
 
               {securedPickups.map((req) => (
-                <div key={req.id} className="p-3 rounded-lg bg-[#f0fdf4] border border-[#bbf7d0] text-xs space-y-1.5">
+                <div key={req.id} className="p-4 rounded-xl bg-emerald-50/70 border border-emerald-200 text-xs space-y-2">
                   <div className="flex items-center justify-between">
-                    <span className="font-bold text-[#166534]">{req.vehicleId} · {req.driverName}</span>
+                    <span className="font-bold text-emerald-950 text-sm">{req.vehicleId} · {req.driverName}</span>
                     <StatusBadge label="Allocated / Secured" variant="success" />
                   </div>
-                  <p className="text-[11px] text-[#14532d]">
+                  <p className="text-xs text-emerald-900 font-medium">
                     <strong>{req.godownName}</strong>: {req.quantity} units buffer stock reserved.
                   </p>
-                  <div className="flex items-center justify-between text-[10px] text-[#166534]/80">
+                  <div className="flex items-center justify-between text-[11px] text-emerald-800 font-medium">
                     <span>Cargo: {req.cargoType}</span>
                     <span>Dest: {req.destination}</span>
                   </div>
@@ -223,27 +227,27 @@ export function ContractorOps() {
           )}
 
           {/* Regional Godown Registry */}
-          <div className="p-4 space-y-3">
-            <h2 className="text-xs font-bold text-[#1a1a19] uppercase tracking-wider">
+          <div className="p-5 space-y-3">
+            <h2 className="text-xs font-bold text-[#71717a] uppercase tracking-wider">
               Regional Buffer Nodes ({godowns.length})
             </h2>
 
             <div className="space-y-2.5">
               {godowns.map((g) => (
-                <div key={g.id} className="p-3 rounded-lg bg-[#fafaf9] border border-[#e4e4e3] space-y-1.5">
+                <div key={g.id} className="p-3.5 rounded-xl bg-zinc-50 border border-[#e4e4e7] space-y-1.5">
                   <div className="flex items-start justify-between">
                     <div>
-                      <p className="text-xs font-bold text-[#1a1a19]">{g.name}</p>
-                      <p className="text-[11px] text-[#8a8a87]">{g.locationLabel}</p>
+                      <p className="text-xs font-bold text-[#18181b]">{g.name}</p>
+                      <p className="text-xs text-[#71717a] font-medium">{g.locationLabel}</p>
                     </div>
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-white border border-[#e4e4e3] text-[#5a5a57]">
+                    <span className="text-xs font-bold px-2 py-0.5 rounded bg-white border border-[#e4e4e7] text-[#18181b]">
                       {g.availableStock} units
                     </span>
                   </div>
 
-                  <div className="text-[11px] text-[#5a5a57]">
-                    <span className="text-[#8a8a87]">Suitable Cargo: </span>
-                    <span className="font-medium text-[#1a1a19]">{g.suitableCargoTypes.join(', ')}</span>
+                  <div className="text-xs text-[#52525b] pt-1 border-t border-zinc-200 font-medium">
+                    <span className="text-[#71717a]">Suitable Cargo: </span>
+                    <span className="font-bold text-[#18181b]">{g.suitableCargoTypes.join(', ')}</span>
                   </div>
                 </div>
               ))}
@@ -251,10 +255,10 @@ export function ContractorOps() {
           </div>
 
           {/* Operational Policy Note */}
-          <div className="p-4 bg-[#fafaf9] text-xs text-[#8a8a87] flex items-start gap-2.5">
-            <CheckCircle2 className="w-4 h-4 text-[#16a34a] shrink-0 mt-0.5" />
-            <p className="leading-relaxed text-[11px] text-[#5a5a57]">
-              <strong>Autonomous Emergency Godown Protocol:</strong> When all alternative mountain passes exceed the safety threshold (&gt;85/100 risk score), in-transit freight is diverted to the closest verified regional godown to protect cargo integrity and driver safety.
+          <div className="p-5 bg-[#fafafa] text-xs text-[#71717a] flex items-start gap-3 mt-auto">
+            <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
+            <p className="leading-relaxed text-xs text-[#52525b] font-medium">
+              <strong className="text-[#18181b]">Emergency Godown Shelter Protocol:</strong> When severe mountain blockages close all transit corridors (&gt;85/100 risk score), freight is diverted to the closest verified regional godown to protect perishable medicines, rations, and driver safety.
             </p>
           </div>
         </div>

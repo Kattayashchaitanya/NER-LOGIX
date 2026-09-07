@@ -9,7 +9,6 @@ import {
   Wifi,
   WifiOff,
   RefreshCw,
-  ChevronRight,
   ChevronDown,
   Truck,
   Activity,
@@ -17,6 +16,7 @@ import {
   Warehouse,
   AlertTriangle,
   Check,
+  Menu,
 } from 'lucide-react';
 import type { NetworkStatus, UserRole } from '@/types';
 
@@ -28,9 +28,24 @@ function NetworkIndicator({
   onToggle: () => void;
 }) {
   const config = {
-    online: { icon: <Wifi className="w-3.5 h-3.5" />, label: 'Network Connected', color: 'text-[#16a34a] bg-[#f0fdf4] border-[#bbf7d0]' },
-    offline: { icon: <WifiOff className="w-3.5 h-3.5" />, label: 'Offline Mode (Local IDB)', color: 'text-[#dc2626] bg-[#fef2f2] border-[#fecaca]' },
-    syncing: { icon: <RefreshCw className="w-3.5 h-3.5 animate-spin" />, label: 'Syncing Queue...', color: 'text-[#d97706] bg-[#fffbeb] border-[#fde68a]' },
+    online: {
+      icon: <Wifi className="w-4 h-4" />,
+      label: 'Online',
+      badge: 'Live Sync',
+      color: 'text-emerald-700 bg-emerald-50 border-emerald-300 hover:bg-emerald-100',
+    },
+    offline: {
+      icon: <WifiOff className="w-4 h-4" />,
+      label: 'Offline Mode',
+      badge: 'Saved on Device',
+      color: 'text-rose-700 bg-rose-50 border-rose-300 hover:bg-rose-100',
+    },
+    syncing: {
+      icon: <RefreshCw className="w-4 h-4 animate-spin" />,
+      label: 'Syncing',
+      badge: 'Uploading Data',
+      color: 'text-amber-700 bg-amber-50 border-amber-300 hover:bg-amber-100',
+    },
   };
   const cfg = config[status];
 
@@ -38,13 +53,14 @@ function NetworkIndicator({
     <button
       onClick={onToggle}
       className={cn(
-        'flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold border transition-all cursor-pointer shadow-xs',
+        'flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all cursor-pointer shadow-xs select-none',
         cfg.color
       )}
-      title="Toggle Network Simulation (Online / Offline IDB cache)"
+      title="Click to toggle Network status (Online / Offline mode test)"
     >
       {cfg.icon}
-      <span>{cfg.label}</span>
+      <span className="font-bold">{cfg.label}</span>
+      <span className="hidden lg:inline text-[11px] opacity-80 font-normal">({cfg.badge})</span>
     </button>
   );
 }
@@ -91,45 +107,45 @@ export function TopBar({ className }: TopBarProps) {
     subtitle: string;
     description: string;
     icon: React.ReactNode;
-    badgeBg: string;
+    color: string;
     path: string;
   }> = {
     driver: {
-      title: 'Driver Journey Cockpit',
-      roleName: 'Driver / Field Operator',
+      title: 'Driver',
+      roleName: 'Driver Mode',
       subtitle: currentDriverVehicle
         ? `${currentDriverVehicle.driverName} · ${currentDriverVehicle.id}`
         : 'Arjun Baruah · AS-01-J-4422',
-      description: 'Journey safety & field reporting',
-      icon: <Truck className="w-3.5 h-3.5 text-[#2563eb]" />,
-      badgeBg: 'bg-[#eff6ff] text-[#1e40af] border-[#bfdbfe]',
+      description: 'Turn-by-turn navigation, mountain landslide bypass & hazard reporting',
+      icon: <Truck className="w-4 h-4" />,
+      color: 'bg-blue-600 text-white',
       path: '/driver',
     },
     dispatcher: {
-      title: 'Operations Control Center',
-      roleName: 'Fleet Dispatcher',
-      subtitle: `${activeVehicles.length} Active Transports · Regional Grid`,
-      description: 'Fleet monitoring & response',
-      icon: <Activity className="w-3.5 h-3.5 text-[#c2410c]" />,
-      badgeBg: 'bg-[#fff7ed] text-[#9a3412] border-[#fed7aa]',
+      title: 'Dispatcher',
+      roleName: 'Fleet Operations',
+      subtitle: `${activeVehicles.length} Transports on Grid`,
+      description: 'Live GPS fleet radar, reactive rerouting & incident command',
+      icon: <Activity className="w-4 h-4" />,
+      color: 'bg-orange-600 text-white',
       path: '/dispatcher',
     },
     sdma: {
-      title: 'Regional Accessibility & Disaster Intel',
-      roleName: 'SDMA / Govt Authority',
-      subtitle: 'State Disaster Management Authority',
-      description: 'Verification & road status',
-      icon: <ShieldCheck className="w-3.5 h-3.5 text-[#16a34a]" />,
-      badgeBg: 'bg-[#f0fdf4] text-[#166534] border-[#bbf7d0]',
+      title: 'Disaster Team',
+      roleName: 'SDMA Authority',
+      subtitle: 'Disaster Management Unit',
+      description: 'Highway hazard verification, road closures & risk zoning',
+      icon: <ShieldCheck className="w-4 h-4" />,
+      color: 'bg-emerald-600 text-white',
       path: '/sdma',
     },
     contractor: {
-      title: 'Emergency Supply Operations',
-      roleName: 'Contractor / Supply Operator',
-      subtitle: 'Regional Buffer & Godown Network',
-      description: 'Emergency supply operations',
-      icon: <Warehouse className="w-3.5 h-3.5 text-[#86198f]" />,
-      badgeBg: 'bg-[#fdf4ff] text-[#86198f] border-[#f5d0fe]',
+      title: 'Supply Godown',
+      roleName: 'Contractor Storage',
+      subtitle: 'Regional Relief Godowns',
+      description: 'Emergency buffer intake, cold storage & ration reservation',
+      icon: <Warehouse className="w-4 h-4" />,
+      color: 'bg-purple-600 text-white',
       path: '/contractor',
     },
   };
@@ -147,7 +163,7 @@ export function TopBar({ className }: TopBarProps) {
       setNetworkStatus('syncing');
       setTimeout(() => {
         setNetworkStatus('online');
-      }, 1200);
+      }, 1000);
     } else {
       setNetworkStatus('online');
     }
@@ -162,113 +178,110 @@ export function TopBar({ className }: TopBarProps) {
   return (
     <header
       className={cn(
-        'relative z-50 h-13 bg-white border-b border-[#e4e4e3] flex items-center px-4 gap-3 shrink-0 select-none',
-        'shadow-[0_1px_3px_0_rgba(0,0,0,0.02)]',
+        'relative z-40 h-16 bg-white border-b border-[#e5e5e4] flex items-center px-4 md:px-5 gap-3 shrink-0 select-none shadow-xs',
         className
       )}
     >
-      {/* Hamburger */}
+      {/* Sidebar Toggle Button */}
       <button
         onClick={toggleSidebar}
-        className="text-[#8a8a87] hover:text-[#1a1a19] transition-colors p-1.5 rounded-md hover:bg-[#f4f4f3]"
+        className="text-[#52525b] hover:text-[#18181b] transition-colors p-2 rounded-xl hover:bg-[#f4f4f5] cursor-pointer"
         aria-label="Toggle navigation menu"
+        title="Open Navigation Menu"
       >
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round">
-          <line x1="4" y1="7" x2="20" y2="7" />
-          <line x1="4" y1="12" x2="20" y2="12" />
-          <line x1="4" y1="17" x2="20" y2="17" />
-        </svg>
+        <Menu className="w-5 h-5" />
       </button>
 
       {/* Brand Identity */}
-      <div className="flex items-center gap-2">
-        <div className="w-6.5 h-6.5 bg-[#1a1a19] rounded-md flex items-center justify-center shadow-xs">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-            <polyline points="9 22 9 12 15 12 15 22" />
-          </svg>
+      <div
+        onClick={() => navigate('/driver')}
+        className="flex items-center gap-2.5 mr-2 cursor-pointer"
+      >
+        <div className="w-8 h-8 bg-[#18181b] rounded-xl flex items-center justify-center shadow-xs text-white">
+          <Truck className="w-4 h-4 text-white" />
         </div>
-        <span className="text-sm font-bold text-[#1a1a19] tracking-tight">NER-LOGIX</span>
+        <div>
+          <span className="text-base font-bold text-[#18181b] tracking-tight block leading-tight">
+            NER-LOGIX
+          </span>
+          <span className="text-[11px] text-[#71717a] font-semibold">
+            North East Highway Grid
+          </span>
+        </div>
       </div>
 
-      <div className="hidden sm:flex items-center text-[#c4c4c2]">
-        <ChevronRight className="w-3.5 h-3.5" />
+      {/* Desktop Quick Role Switcher Tabs */}
+      <div className="hidden md:flex items-center bg-[#f4f4f5] p-1 rounded-xl border border-[#e4e4e7]">
+        {(Object.keys(roleConfigs) as UserRole[]).map((roleKey) => {
+          const item = roleConfigs[roleKey];
+          const isSelected = role === roleKey;
+          return (
+            <button
+              key={roleKey}
+              onClick={() => handleSelectRole(roleKey, item.path)}
+              className={cn(
+                'flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer select-none',
+                isSelected
+                  ? `${item.color} shadow-xs`
+                  : 'text-[#52525b] hover:text-[#18181b] hover:bg-white/80'
+              )}
+            >
+              {item.icon}
+              <span>{item.title}</span>
+            </button>
+          );
+        })}
       </div>
 
-      {/* Role Context & Secondary Workspace Switcher */}
-      <div className="relative" ref={menuRef}>
+      {/* Mobile Workspace Dropdown */}
+      <div className="md:hidden relative" ref={menuRef}>
         <button
           onClick={() => setMenuOpen(!menuOpen)}
           aria-haspopup="menu"
           aria-expanded={menuOpen}
-          className={cn(
-            'flex items-center gap-2 px-2.5 py-1 rounded-lg border text-xs font-semibold transition-all cursor-pointer',
-            currentWorkspace.badgeBg,
-            'hover:opacity-90 hover:shadow-xs'
-          )}
-          title="Switch operational workspace"
+          className="flex items-center gap-2 px-3 py-2 rounded-xl border border-blue-200 bg-blue-50 text-blue-800 text-xs font-bold shadow-xs cursor-pointer"
         >
           {currentWorkspace.icon}
-          <div className="flex items-center gap-1.5">
-            <span className="font-semibold">{currentWorkspace.title}</span>
-            <span className="hidden md:inline font-normal opacity-70">· {currentWorkspace.subtitle}</span>
-          </div>
-          <ChevronDown className={cn('w-3.5 h-3.5 opacity-60 transition-transform ml-0.5', menuOpen && 'rotate-180')} />
+          <span>{currentWorkspace.title}</span>
+          <ChevronDown className={cn('w-3.5 h-3.5 opacity-70 transition-transform', menuOpen && 'rotate-180')} />
         </button>
 
-        {/* Floating Switcher Dropdown */}
         <AnimatePresence>
           {menuOpen && (
             <motion.div
-              initial={{ opacity: 0, y: 4, scale: 0.98 }}
+              initial={{ opacity: 0, y: 6, scale: 0.98 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 4, scale: 0.98 }}
               transition={{ duration: 0.12 }}
               role="menu"
-              aria-label="Workspace Switcher"
-              className="absolute left-0 top-full mt-1.5 w-80 max-w-[calc(100vw-2rem)] bg-white rounded-xl border border-[#e4e4e3] shadow-lg py-1 z-50 overflow-hidden"
+              className="absolute left-0 top-full mt-2 w-72 bg-white rounded-2xl border border-[#e5e5e4] shadow-xl p-2 z-50 space-y-1"
             >
-              <div className="px-3.5 py-2 bg-[#fafaf9] border-b border-[#f4f4f3]">
-                <p className="text-[10px] font-bold text-[#8a8a87] uppercase tracking-wider">
-                  Operational Workspace
-                </p>
-              </div>
-
-              <div className="py-1">
-                {(Object.keys(roleConfigs) as UserRole[]).map((roleKey) => {
-                  const item = roleConfigs[roleKey];
-                  const isSelected = role === roleKey;
-                  return (
-                    <button
-                      key={roleKey}
-                      role="menuitem"
-                      onClick={() => handleSelectRole(roleKey, item.path)}
-                      className={cn(
-                        'w-full flex items-start gap-2.5 px-3.5 py-2 text-left transition-colors cursor-pointer',
-                        isSelected ? 'bg-[#f4f4f3]' : 'hover:bg-[#fafaf9]'
-                      )}
-                    >
-                      <div className={cn(
-                        'mt-0.5 shrink-0 p-1.5 rounded-md border shadow-2xs',
-                        isSelected ? 'bg-white border-[#d4d4d2]' : 'bg-[#fafaf9] border-[#e4e4e3]'
-                      )}>
+              {(Object.keys(roleConfigs) as UserRole[]).map((roleKey) => {
+                const item = roleConfigs[roleKey];
+                const isSelected = role === roleKey;
+                return (
+                  <button
+                    key={roleKey}
+                    role="menuitem"
+                    onClick={() => handleSelectRole(roleKey, item.path)}
+                    className={cn(
+                      'w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-left font-semibold text-xs cursor-pointer transition-colors',
+                      isSelected ? 'bg-[#f4f4f5] text-[#18181b]' : 'hover:bg-[#fafafa] text-[#52525b]'
+                    )}
+                  >
+                    <div className="flex items-center gap-2">
+                      <div className={cn('p-1.5 rounded-lg', isSelected ? item.color : 'bg-[#f4f4f5] text-[#71717a]')}>
                         {item.icon}
                       </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center justify-between gap-1">
-                          <span className={cn('text-xs font-semibold', isSelected ? 'text-[#1a1a19]' : 'text-[#2a2a28]')}>
-                            {item.roleName}
-                          </span>
-                          {isSelected && <Check className="w-3.5 h-3.5 text-[#16a34a] shrink-0" />}
-                        </div>
-                        <p className="text-[11px] text-[#71717a] leading-tight mt-0.5">
-                          {item.description}
-                        </p>
+                      <div>
+                        <p className="font-bold text-[#18181b]">{item.roleName}</p>
+                        <p className="text-[11px] text-[#71717a] font-normal">{item.title}</p>
                       </div>
-                    </button>
-                  );
-                })}
-              </div>
+                    </div>
+                    {isSelected && <Check className="w-4 h-4 text-emerald-600" />}
+                  </button>
+                );
+              })}
             </motion.div>
           )}
         </AnimatePresence>
@@ -276,41 +289,26 @@ export function TopBar({ className }: TopBarProps) {
 
       {/* Driver Workspace Vehicle Selector */}
       {role === 'driver' && (
-        <div className="flex items-center gap-2">
-          <div className="hidden sm:block h-4 w-px bg-[#e4e4e3]" />
+        <div className="hidden xl:flex items-center gap-2">
+          <div className="h-4 w-px bg-[#e5e5e4]" />
           <DriverVehicleSelector id="topbar-driver-vehicle-selector" />
         </div>
       )}
 
       <div className="flex-1" />
 
-      {/* Global Status Bar */}
-      <div className="flex items-center gap-2.5">
+      {/* Right Tools: Hazard Alert & Network Status */}
+      <div className="flex items-center gap-2 md:gap-3">
         {affectedCount > 0 && (
-          <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[#fef2f2] border border-[#fecaca] text-[#dc2626] text-xs font-semibold">
-            <AlertTriangle className="w-3.5 h-3.5" />
-            <span>{affectedCount} Disruption Impact{affectedCount > 1 ? 's' : ''}</span>
+          <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs font-bold shadow-xs">
+            <AlertTriangle className="w-4 h-4 text-rose-600 shrink-0" />
+            <span>{affectedCount} Hazard{affectedCount > 1 ? 's' : ''} on Highway</span>
           </div>
         )}
 
-        {/* Network Toggle */}
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={networkStatus}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.15 }}
-          >
-            <NetworkIndicator status={networkStatus} onToggle={handleNetworkToggle} />
-          </motion.div>
-        </AnimatePresence>
-
-        {/* Region */}
-        <div className="hidden xl:block text-xs text-[#8a8a87] pl-2.5 border-l border-[#e4e4e3]">
-          North Eastern Corridor
-        </div>
+        <NetworkIndicator status={networkStatus} onToggle={handleNetworkToggle} />
       </div>
     </header>
   );
 }
+

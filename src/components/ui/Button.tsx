@@ -14,21 +14,21 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const variantClasses: Record<ButtonVariant, string> = {
   primary:
-    'bg-[#2563eb] text-white hover:bg-[#1d4ed8] border-transparent shadow-[0_1px_2px_rgba(0,0,0,0.1)]',
+    'bg-blue-600 text-white hover:bg-blue-700 active:bg-blue-800 border-transparent shadow-xs',
   secondary:
-    'bg-[#f5f5f4] text-[#1a1a19] hover:bg-[#e7e7e6] border-[#e4e4e3]',
+    'bg-[#f4f4f5] text-[#18181b] hover:bg-[#e4e4e7] active:bg-[#d4d4d8] border-[#e4e4e7]',
   ghost:
-    'bg-transparent text-[#5a5a57] hover:bg-[#f5f5f4] border-transparent',
+    'bg-transparent text-[#52525b] hover:bg-[#f4f4f5] active:bg-[#e4e4e7] border-transparent',
   danger:
-    'bg-[#dc2626] text-white hover:bg-[#b91c1c] border-transparent shadow-[0_1px_2px_rgba(0,0,0,0.1)]',
+    'bg-rose-600 text-white hover:bg-rose-700 active:bg-rose-800 border-transparent shadow-xs',
   outline:
-    'bg-white text-[#1a1a19] hover:bg-[#f5f5f4] border-[#e4e4e3]',
+    'bg-white text-[#18181b] hover:bg-[#f4f4f5] active:bg-[#e4e4e7] border-[#e4e4e7] shadow-xs',
 };
 
 const sizeClasses: Record<ButtonSize, string> = {
-  sm: 'px-2.5 py-1.5 text-xs gap-1.5 rounded',
-  md: 'px-3.5 py-2 text-sm gap-2 rounded-md',
-  lg: 'px-5 py-2.5 text-sm gap-2 rounded-md',
+  sm: 'px-3 py-1.5 text-xs gap-1.5 rounded-lg min-h-[36px]',
+  md: 'px-4 py-2.5 text-sm gap-2 rounded-xl min-h-[44px]',
+  lg: 'px-6 py-3.5 text-base gap-2.5 rounded-xl min-h-[50px] font-semibold',
 };
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
@@ -51,7 +51,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         disabled={disabled || loading}
         className={cn(
-          'inline-flex items-center justify-center font-medium border transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2563eb] focus-visible:ring-offset-1',
+          'inline-flex items-center justify-center font-semibold border transition-all duration-150 select-none cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2',
           'disabled:opacity-50 disabled:cursor-not-allowed',
           variantClasses[variant],
           sizeClasses[size],
@@ -60,11 +60,11 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         {...props}
       >
         {loading ? (
-          <span className="w-3.5 h-3.5 border-2 border-current border-t-transparent rounded-full animate-spin" />
+          <span className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
         ) : (
           iconLeft
         )}
-        {children}
+        <span>{children}</span>
         {!loading && iconRight}
       </button>
     );

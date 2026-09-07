@@ -245,82 +245,84 @@ export function DemoSimulationBar() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 16, scale: 0.96 }}
             transition={{ duration: 0.15 }}
-            className="mb-2 w-80 bg-white rounded-xl shadow-2xl border border-[#e4e4e3] p-3 text-xs divide-y divide-[#f0f0ef]"
+            className="mb-2 w-84 max-w-[calc(100vw-2rem)] bg-white rounded-2xl shadow-2xl border border-[#e5e5e4] p-3.5 text-xs divide-y divide-[#f4f4f5] isolate z-[9999]"
           >
             {/* Header */}
             <div className="pb-2.5 flex items-center justify-between">
-              <div className="flex items-center gap-1.5 font-bold text-[#1a1a19]">
-                <Sliders className="w-4 h-4 text-[#2563eb]" />
-                <span>NER-LOGIX Jury Test Controls</span>
+              <div className="flex items-center gap-2 font-bold text-[#18181b]">
+                <div className="w-6 h-6 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center">
+                  <Sliders className="w-3.5 h-3.5" />
+                </div>
+                <span>Simulation & Demo Hub</span>
               </div>
-              <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#eff6ff] text-[#2563eb] font-bold">
-                SIH26002
+              <span className="text-[10px] px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 font-bold border border-blue-200">
+                SIH Evaluator
               </span>
             </div>
 
             {/* Guided Pitch Walkthrough */}
-            <div className="py-2.5 space-y-1.5">
-              <p className="text-[10px] uppercase font-bold tracking-wider text-[#8a8a87]">
-                3-Minute Evaluator Storyline
+            <div className="py-2.5 space-y-2">
+              <p className="text-[10px] uppercase font-bold tracking-wider text-[#71717a]">
+                Evaluator Walkthrough
               </p>
               <Button
                 variant="primary"
                 size="sm"
-                className="w-full bg-[#1e293b] hover:bg-[#0f172a] text-white flex items-center justify-center gap-2"
+                className="w-full bg-[#18181b] hover:bg-[#27272a] text-white flex items-center justify-center gap-2 shadow-xs cursor-pointer py-2 font-semibold"
                 onClick={() => executeStage(0)}
               >
-                <PlayCircle className="w-3.5 h-3.5 text-[#38bdf8]" />
-                <span>Launch Interactive Pitch Story</span>
+                <PlayCircle className="w-4 h-4 text-sky-400" />
+                <span>Launch 8-Step Storyline</span>
               </Button>
             </div>
 
             {/* Manual Simulation Triggers */}
             <div className="py-2.5 space-y-2">
-              <p className="text-[10px] uppercase font-bold tracking-wider text-[#8a8a87]">
-                Live Disruption & Environment Injections
+              <p className="text-[10px] uppercase font-bold tracking-wider text-[#71717a]">
+                Live Disruption Injections
               </p>
-              <div className="grid grid-cols-2 gap-1.5">
+              <div className="grid grid-cols-2 gap-2">
                 <Button
                   size="sm"
                   variant="outline"
-                  className="text-[11px] h-8 justify-start px-2 hover:bg-[#fef2f2] hover:text-[#dc2626] border-[#fca5a5]"
+                  className="text-[11px] h-8 justify-start px-2 hover:bg-rose-50 hover:text-rose-700 border-rose-200 cursor-pointer"
                   onClick={handleInjectLandslide}
                   title="Injects a major slope failure on NH-2 Mao Gate and immediately notifies fleet"
                 >
-                  <AlertTriangle className="w-3.5 h-3.5 text-[#dc2626] shrink-0" />
-                  <span className="truncate">Inject Landslide</span>
+                  <AlertTriangle className="w-3.5 h-3.5 text-rose-600 shrink-0 mr-1" />
+                  <span className="truncate font-medium">NH-2 Landslide</span>
                 </Button>
 
                 <Button
                   size="sm"
                   variant="outline"
-                  className={`text-[11px] h-8 justify-start px-2 border transition-all ${
+                  className={`text-[11px] h-8 justify-start px-2 border transition-all cursor-pointer ${
                     weatherSpikeActive
-                      ? 'bg-[#2563eb] text-white border-[#1d4ed8] hover:bg-[#1d4ed8]'
-                      : 'hover:bg-[#eff6ff] hover:text-[#2563eb] border-[#bfdbfe]'
+                      ? 'bg-blue-600 text-white border-blue-700 hover:bg-blue-700'
+                      : 'hover:bg-blue-50 hover:text-blue-700 border-blue-200'
                   }`}
                   onClick={handleSimulateWeatherSpike}
                   title="Simulates 45mm/h cloudburst over Karbi Anglong / Doyyang corridor"
                 >
-                  <CloudRain className={`w-3.5 h-3.5 shrink-0 ${weatherSpikeActive ? 'text-white' : 'text-[#2563eb]'}`} />
-                  <span className="truncate">{weatherSpikeActive ? 'Rain Active (45mm)' : 'Rainfall Spike'}</span>
+                  <CloudRain className={`w-3.5 h-3.5 shrink-0 mr-1 ${weatherSpikeActive ? 'text-white' : 'text-blue-600'}`} />
+                  <span className="truncate font-medium">{weatherSpikeActive ? 'Cloudburst On' : 'Rain Surge'}</span>
                 </Button>
 
                 <Button
                   size="sm"
                   variant="outline"
-                  className="text-[11px] h-8 justify-start px-2 hover:bg-[#fff7ed] hover:text-[#c2410c] border-[#fed7aa]"
+                  className="text-[11px] h-8 justify-start px-2 hover:bg-orange-50 hover:text-orange-700 border-orange-200 cursor-pointer"
                   onClick={handleTriggerCorridorCollapse}
                   title="Collapses all alternative passes and routes heavy vehicle to nearest emergency godown"
                 >
-                  <Warehouse className="w-3.5 h-3.5 text-[#c2410c] shrink-0" />
-                  <span className="truncate">Corridor Collapse</span>
+                  <Warehouse className="w-3.5 h-3.5 text-orange-600 shrink-0 mr-1" />
+                  <span className="truncate font-medium">Godown Relief</span>
                 </Button>
 
                 <Button
                   size="sm"
                   variant="outline"
-                  className="text-[11px] h-8 justify-start px-2"
+                  className="text-[11px] h-8 justify-start px-2 cursor-pointer"
                   onClick={() =>
                     setNetworkStatus(networkStatus === 'online' ? 'offline' : 'online')
                   }
@@ -328,13 +330,13 @@ export function DemoSimulationBar() {
                 >
                   {networkStatus === 'online' ? (
                     <>
-                      <WifiOff className="w-3.5 h-3.5 text-[#dc2626] shrink-0" />
-                      <span className="truncate">Kill Network</span>
+                      <WifiOff className="w-3.5 h-3.5 text-rose-600 shrink-0 mr-1" />
+                      <span className="truncate font-medium">Drop 4G Signal</span>
                     </>
                   ) : (
                     <>
-                      <Wifi className="w-3.5 h-3.5 text-[#16a34a] shrink-0" />
-                      <span className="truncate">Restore 4G</span>
+                      <Wifi className="w-3.5 h-3.5 text-emerald-600 shrink-0 mr-1" />
+                      <span className="truncate font-medium">Restore 4G</span>
                     </>
                   )}
                 </Button>
@@ -343,15 +345,15 @@ export function DemoSimulationBar() {
 
             {/* Quick Role Switcher for Jury */}
             <div className="py-2.5 space-y-1.5">
-              <p className="text-[10px] uppercase font-bold tracking-wider text-[#8a8a87]">
-                Quick Workspace Switch
+              <p className="text-[10px] uppercase font-bold tracking-wider text-[#71717a]">
+                Quick Workspace
               </p>
-              <div className="grid grid-cols-4 gap-1">
+              <div className="grid grid-cols-4 gap-1.5">
                 {[
-                  { r: 'driver' as const, label: 'Driver', path: '/driver', icon: <Truck className="w-3 h-3" /> },
-                  { r: 'dispatcher' as const, label: 'Ops', path: '/dispatcher', icon: <Activity className="w-3 h-3" /> },
-                  { r: 'sdma' as const, label: 'SDMA', path: '/sdma', icon: <ShieldCheck className="w-3 h-3" /> },
-                  { r: 'contractor' as const, label: 'Godown', path: '/contractor', icon: <Warehouse className="w-3 h-3" /> },
+                  { r: 'driver' as const, label: 'Driver', path: '/driver', icon: <Truck className="w-3.5 h-3.5" /> },
+                  { r: 'dispatcher' as const, label: 'Ops', path: '/dispatcher', icon: <Activity className="w-3.5 h-3.5" /> },
+                  { r: 'sdma' as const, label: 'SDMA', path: '/sdma', icon: <ShieldCheck className="w-3.5 h-3.5" /> },
+                  { r: 'contractor' as const, label: 'Godown', path: '/contractor', icon: <Warehouse className="w-3.5 h-3.5" /> },
                 ].map((item) => (
                   <button
                     key={item.r}
@@ -359,28 +361,28 @@ export function DemoSimulationBar() {
                       setRole(item.r);
                       navigate(item.path);
                     }}
-                    className={`flex flex-col items-center justify-center p-1.5 rounded-lg border text-[10px] font-semibold transition-all cursor-pointer ${
+                    className={`flex flex-col items-center justify-center p-2 rounded-xl border text-[10px] font-semibold transition-all cursor-pointer ${
                       role === item.r
-                        ? 'bg-[#1a1a19] text-white border-[#1a1a19]'
-                        : 'bg-[#fafaf9] hover:bg-[#f4f4f3] text-[#5a5a57] border-[#e4e4e3]'
+                        ? 'bg-[#18181b] text-white border-[#18181b] shadow-xs'
+                        : 'bg-[#fafafa] hover:bg-[#f4f4f5] text-[#52525b] border-[#e5e5e4]'
                     }`}
                   >
                     {item.icon}
-                    <span className="mt-0.5">{item.label}</span>
+                    <span className="mt-1">{item.label}</span>
                   </button>
                 ))}
               </div>
             </div>
 
             {/* Reset */}
-            <div className="pt-2 flex items-center justify-between text-[11px] text-[#8a8a87]">
-              <span>Active Disruptions: {disruptions.length}</span>
+            <div className="pt-2.5 flex items-center justify-between text-[11px] text-[#71717a]">
+              <span>Active Alerts: {disruptions.length}</span>
               <button
                 onClick={handleResetDemo}
-                className="flex items-center gap-1 text-[#dc2626] hover:underline cursor-pointer font-medium"
+                className="flex items-center gap-1.5 text-rose-600 hover:text-rose-700 hover:underline cursor-pointer font-semibold"
               >
                 <RotateCcw className="w-3 h-3" />
-                Reset System
+                Reset State
               </button>
             </div>
           </motion.div>
@@ -390,11 +392,11 @@ export function DemoSimulationBar() {
       {/* Toggle Pill Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 px-3.5 py-2 bg-[#1a1a19] text-white rounded-full shadow-xl hover:bg-[#2a2a29] transition-all text-xs font-semibold cursor-pointer border border-white/15"
+        className="flex items-center gap-2 px-3.5 py-2 bg-[#18181b] text-white rounded-full shadow-lg hover:bg-[#27272a] transition-all text-xs font-semibold cursor-pointer border border-white/15"
       >
-        <Sliders className="w-3.5 h-3.5 text-[#38bdf8]" />
-        <span>SIH Jury Demo Panel</span>
-        {isOpen ? <ChevronDown className="w-3.5 h-3.5" /> : <ChevronUp className="w-3.5 h-3.5" />}
+        <Sliders className="w-3.5 h-3.5 text-sky-400" />
+        <span>Demo & Simulation</span>
+        {isOpen ? <ChevronDown className="w-3.5 h-3.5 opacity-70" /> : <ChevronUp className="w-3.5 h-3.5 opacity-70" />}
       </button>
     </div>
   );

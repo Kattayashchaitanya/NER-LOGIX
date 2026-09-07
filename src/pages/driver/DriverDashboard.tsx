@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { DEMO_TRIP, DEMO_ROUTES, LOCATIONS } from '@/data/demo';
-import { StatusBadge } from '@/components/ui/StatusBadge';
 import { Button } from '@/components/ui/Button';
 import { MapContainer } from '@/components/map/MapContainer';
 import { DriverVehicleSelector } from '@/components/ui/DriverVehicleSelector';
@@ -27,7 +26,7 @@ import {
 } from 'lucide-react';
 
 export function DriverDashboard() {
-  const { isJourneyActive, selectedRouteId, networkStatus, selectedDriverVehicleId } = useAppStore();
+  const { isJourneyActive, selectedRouteId, selectedDriverVehicleId } = useAppStore();
 
   const activeVehicles = useNetworkStore((state) => state.activeVehicles);
   const activeIncidents = useNetworkStore((state) => state.activeIncidents);
@@ -100,38 +99,37 @@ export function DriverDashboard() {
   return (
     <div className="h-full flex flex-col bg-[#f8f8f7]">
       {/* Top Cockpit Header */}
-      <div className="px-5 py-3 bg-white border-b border-[#e4e4e3] shrink-0">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
-          <div>
-            <div className="flex items-center gap-2 flex-wrap">
-              <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-[#eff6ff] text-[#1e40af] border border-[#bfdbfe]">
-                Field Operator Cockpit
+      <div className="px-5 py-4 bg-white border-b border-[#e5e5e4] shrink-0 shadow-xs">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="flex items-center gap-3 flex-wrap">
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-lg bg-blue-50 text-blue-800 border border-blue-200">
+                Driver Mode
               </span>
               <DriverVehicleSelector id="cockpit-driver-vehicle-selector" />
             </div>
-            <h1 className="text-base sm:text-lg font-bold text-[#1a1a19] tracking-tight mt-1">
+            <div className="hidden md:block h-5 w-px bg-[#e5e5e4]" />
+            <h1 className="text-base font-bold text-[#18181b] tracking-tight">
               {driverVehicle?.driverName} · {driverVehicle?.origin || 'Guwahati'} → {driverVehicle?.destination || 'Imphal'}
             </h1>
           </div>
 
-          <div className="flex items-center gap-2">
-            <StatusBadge
-              label={networkStatus === 'online' ? 'Network Connected' : 'Offline Cache (IDB)'}
-              variant={networkStatus === 'online' ? 'success' : 'danger'}
-            />
+          <div className="flex items-center gap-2.5">
             <Button
-              size="sm"
+              size="md"
               variant={isJourneyActive ? 'primary' : 'outline'}
               onClick={() => navigate(isJourneyActive ? '/driver/navigation' : '/driver/trip')}
-              iconLeft={isJourneyActive ? <Navigation className="w-3.5 h-3.5" /> : <Route className="w-3.5 h-3.5" />}
+              iconLeft={isJourneyActive ? <Navigation className="w-4 h-4" /> : <Route className="w-4 h-4" />}
+              className="cursor-pointer font-bold"
             >
-              {isJourneyActive ? 'Active Navigation' : 'Plan Trip'}
+              {isJourneyActive ? 'Active Navigation' : 'Plan Trip Route'}
             </Button>
             <Button
-              size="sm"
+              size="md"
               variant="danger"
               onClick={() => navigate('/driver/report')}
-              iconLeft={<AlertTriangle className="w-3.5 h-3.5" />}
+              iconLeft={<AlertTriangle className="w-4 h-4" />}
+              className="cursor-pointer bg-rose-600 hover:bg-rose-700 text-white font-bold"
             >
               Report Hazard
             </Button>
@@ -139,7 +137,7 @@ export function DriverDashboard() {
         </div>
 
         {/* PRIMARY OPERATIONAL ACTION BANNER */}
-        <div className="mt-2.5">
+        <div className="mt-3">
           <AnimatePresence mode="wait">
             {/* Case 1: Disrupted Ahead -> Reroute Recommendation */}
             {isDisrupted && !isRerouted && (
@@ -148,48 +146,48 @@ export function DriverDashboard() {
                 initial={{ opacity: 0, y: -4 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -4 }}
-                className="p-3 rounded-xl bg-[#fef2f2] border border-[#fca5a5] shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-3"
+                className="p-4 rounded-2xl bg-rose-50 border-2 border-rose-300 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-3.5"
               >
-                <div className="flex items-start gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-[#dc2626] text-white flex items-center justify-center shrink-0 shadow-xs mt-0.5">
-                    <AlertTriangle className="w-4 h-4" />
+                <div className="flex items-start gap-3.5">
+                  <div className="w-10 h-10 rounded-xl bg-rose-600 text-white flex items-center justify-center shrink-0 shadow-xs mt-0.5">
+                    <AlertTriangle className="w-5 h-5" />
                   </div>
                   <div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs font-bold text-[#991b1b] uppercase tracking-wide">
-                        Road Hazard Detected Ahead
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span className="text-sm font-bold text-rose-950 uppercase tracking-wide">
+                        Road Hazard Ahead · Intervention Suggested
                       </span>
-                      <span className="px-1.5 py-0.2 rounded text-[10px] font-bold bg-[#dc2626] text-white">
+                      <span className="px-2 py-0.5 rounded-md text-xs font-bold bg-rose-600 text-white">
                         Action Required
                       </span>
                     </div>
-                    <p className="text-xs text-[#7f1d1d] mt-0.5">
+                    <p className="text-sm text-rose-900 mt-1 font-medium">
                       {driverVehicle?.impactReason || 'NH-2 Mao Gate Landslide verified by SDMA. Corridor blocked.'}
                     </p>
-                    <p className="text-[11px] text-[#991b1b] font-medium mt-0.5">
-                      Recommended Action: Alternate corridor via Lumding / Haflong detour available from your current position.
+                    <p className="text-xs text-rose-800 font-semibold mt-1">
+                      Recommended: Safe mountain detour via Haflong / Lumding corridor available from your current position.
                     </p>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-2 shrink-0">
                   <Button
-                    size="sm"
+                    size="md"
                     variant="outline"
                     onClick={() => navigate('/driver/trip')}
-                    className="border-[#fca5a5] text-[#991b1b] hover:bg-[#fee2e2]"
+                    className="border-rose-300 text-rose-900 hover:bg-rose-100 cursor-pointer font-bold"
                   >
-                    Review Alternate
+                    Compare Alternate
                   </Button>
                   <Button
-                    size="sm"
+                    size="md"
                     variant="primary"
                     onClick={handleStartReroute}
                     disabled={reroutingInProgress}
-                    iconLeft={reroutingInProgress ? <RotateCw className="w-3.5 h-3.5 animate-spin" /> : <Navigation className="w-3.5 h-3.5" />}
-                    className="bg-[#dc2626] hover:bg-[#b91c1c] text-white border-transparent"
+                    iconLeft={reroutingInProgress ? <RotateCw className="w-4 h-4 animate-spin" /> : <Navigation className="w-4 h-4" />}
+                    className="bg-rose-600 hover:bg-rose-700 text-white border-transparent cursor-pointer font-bold shadow-xs"
                   >
-                    {reroutingInProgress ? 'Computing Waypoints...' : 'Start Reroute from Here'}
+                    {reroutingInProgress ? 'Computing Route...' : 'Start Safe Detour'}
                   </Button>
                 </div>
               </motion.div>
@@ -202,36 +200,37 @@ export function DriverDashboard() {
                 initial={{ opacity: 0, y: -4 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -4 }}
-                className="p-3 rounded-xl bg-[#eff6ff] border border-[#93c5fd] shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-3"
+                className="p-4 rounded-2xl bg-blue-50 border-2 border-blue-300 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-3.5"
               >
-                <div className="flex items-start gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-[#2563eb] text-white flex items-center justify-center shrink-0 shadow-xs mt-0.5">
-                    <CheckCircle2 className="w-4 h-4" />
+                <div className="flex items-start gap-3.5">
+                  <div className="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center shrink-0 shadow-xs mt-0.5">
+                    <CheckCircle2 className="w-5 h-5" />
                   </div>
                   <div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs font-bold text-[#1e40af] uppercase tracking-wide">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span className="text-sm font-bold text-blue-950 uppercase tracking-wide">
                         Reactive Reroute Active
                       </span>
-                      <span className="px-1.5 py-0.2 rounded text-[10px] font-bold bg-[#2563eb] text-white">
+                      <span className="px-2 py-0.5 rounded-md text-xs font-bold bg-blue-600 text-white">
                         Avoiding Hazard
                       </span>
                     </div>
-                    <p className="text-xs text-[#1e3a8a] mt-0.5">
+                    <p className="text-sm text-blue-900 mt-1 font-medium">
                       Diverting from {driverVehicle?.rerouteFromLabel || 'Current Position'} toward {DEMO_TRIP.destination.name}.
                     </p>
-                    <p className="text-[11px] text-[#2563eb] font-medium mt-0.5">
-                      Updated ETA: {formatEta(displayEta)} (includes mountain bypass margin).
+                    <p className="text-xs text-blue-800 font-semibold mt-1">
+                      Updated ETA: {formatEta(displayEta)} (includes mountain bypass safety margin).
                     </p>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-2 shrink-0">
                   <Button
-                    size="sm"
+                    size="md"
                     variant="primary"
                     onClick={() => navigate('/driver/navigation')}
-                    iconLeft={<Navigation className="w-3.5 h-3.5" />}
+                    iconLeft={<Navigation className="w-4 h-4" />}
+                    className="bg-blue-600 hover:bg-blue-700 text-white cursor-pointer font-bold shadow-xs"
                   >
                     Continue Navigation
                   </Button>
@@ -246,22 +245,22 @@ export function DriverDashboard() {
                 initial={{ opacity: 0, y: -4 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -4 }}
-                className="p-3 rounded-xl bg-[#fff7ed] border border-[#fed7aa] shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-3"
+                className="p-4 rounded-2xl bg-amber-50 border-2 border-amber-300 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-3.5"
               >
-                <div className="flex items-start gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-[#ea580c] text-white flex items-center justify-center shrink-0 shadow-xs mt-0.5">
-                    <Warehouse className="w-4 h-4" />
+                <div className="flex items-start gap-3.5">
+                  <div className="w-10 h-10 rounded-xl bg-amber-600 text-white flex items-center justify-center shrink-0 shadow-xs mt-0.5">
+                    <Warehouse className="w-5 h-5" />
                   </div>
                   <div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs font-bold text-[#9a3412] uppercase tracking-wide">
-                        No Viable Alternate Corridor
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span className="text-sm font-bold text-amber-950 uppercase tracking-wide">
+                        No Safe Alternative Corridor
                       </span>
-                      <span className="px-1.5 py-0.2 rounded text-[10px] font-bold bg-[#ea580c] text-white">
+                      <span className="px-2 py-0.5 rounded-md text-xs font-bold bg-amber-600 text-white">
                         Emergency Fallback
                       </span>
                     </div>
-                    <p className="text-xs text-[#7c2d12] mt-0.5">
+                    <p className="text-sm text-amber-900 mt-1 font-medium">
                       Highway pass blocked. Emergency relief godown storage available nearby to preserve cold-chain cargo.
                     </p>
                   </div>
@@ -269,10 +268,11 @@ export function DriverDashboard() {
 
                 <div className="flex items-center gap-2 shrink-0">
                   <Button
-                    size="sm"
+                    size="md"
                     variant="danger"
                     onClick={handleEmergencyPickup}
-                    iconLeft={<Warehouse className="w-3.5 h-3.5" />}
+                    iconLeft={<Warehouse className="w-4 h-4" />}
+                    className="cursor-pointer font-bold"
                   >
                     Find Emergency Godown
                   </Button>
@@ -287,37 +287,34 @@ export function DriverDashboard() {
                 initial={{ opacity: 0, y: -4 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -4 }}
-                className="p-3 rounded-xl bg-[#f0fdf4] border border-[#86efac] shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-3"
+                className="p-4 rounded-2xl bg-emerald-50 border-2 border-emerald-300 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-3.5"
               >
-                <div className="flex items-start gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-[#16a34a] text-white flex items-center justify-center shrink-0 shadow-xs mt-0.5">
-                    <ShieldCheck className="w-4 h-4" />
+                <div className="flex items-start gap-3.5">
+                  <div className="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center shrink-0 shadow-xs mt-0.5">
+                    <ShieldCheck className="w-5 h-5" />
                   </div>
                   <div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs font-bold text-[#166534] uppercase tracking-wide">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span className="text-sm font-bold text-emerald-950 uppercase tracking-wide">
                         Emergency Storage & Buffer Authorized
                       </span>
-                      <span className="px-1.5 py-0.2 rounded text-[10px] font-bold bg-[#16a34a] text-white">
+                      <span className="px-2 py-0.5 rounded-md text-xs font-bold bg-emerald-600 text-white">
                         Secured
                       </span>
                     </div>
-                    <p className="text-xs text-[#14532d] mt-0.5">
+                    <p className="text-sm text-emerald-900 mt-1 font-medium">
                       Emergency godown allocation confirmed by Supply Contractor. Proceed to {driverVehicle?.destination || 'designated emergency facility'}.
-                    </p>
-                    <p className="text-[11px] text-[#166534] font-medium mt-0.5">
-                      {driverVehicle?.rerouteReason || 'Buffer stock and cold-chain relief capacity reserved.'}
                     </p>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-2 shrink-0">
                   <Button
-                    size="sm"
+                    size="md"
                     variant="primary"
                     onClick={() => navigate('/driver/navigation')}
-                    className="bg-[#16a34a] hover:bg-[#15803d] text-white border-transparent"
-                    iconLeft={<Navigation className="w-3.5 h-3.5" />}
+                    className="bg-emerald-600 hover:bg-emerald-700 text-white border-transparent cursor-pointer font-bold shadow-xs"
+                    iconLeft={<Navigation className="w-4 h-4" />}
                   >
                     Navigate to Emergency Godown
                   </Button>
@@ -332,35 +329,36 @@ export function DriverDashboard() {
                 initial={{ opacity: 0, y: -4 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -4 }}
-                className="p-3 rounded-xl bg-[#f0fdf4] border border-[#bbf7d0] shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-3"
+                className="p-4 rounded-2xl bg-emerald-50 border-2 border-emerald-200 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-3.5"
               >
-                <div className="flex items-start gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-[#16a34a] text-white flex items-center justify-center shrink-0 shadow-xs mt-0.5">
-                    <ShieldCheck className="w-4 h-4" />
+                <div className="flex items-start gap-3.5">
+                  <div className="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center shrink-0 shadow-xs mt-0.5">
+                    <ShieldCheck className="w-5 h-5" />
                   </div>
                   <div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs font-bold text-[#166534] uppercase tracking-wide">
-                        Safe to Continue Journey
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span className="text-sm font-bold text-emerald-950 uppercase tracking-wide">
+                        Highway Corridor Clear · Safe to Transit
                       </span>
-                      <span className="px-1.5 py-0.2 rounded text-[10px] font-bold bg-[#16a34a] text-white">
-                        Corridor Clear
+                      <span className="px-2 py-0.5 rounded-md text-xs font-bold bg-emerald-600 text-white">
+                        Nominal Risk
                       </span>
                     </div>
-                    <p className="text-xs text-[#14532d] mt-0.5">
-                      No active road closures on planned route to {driverVehicle?.destination || DEMO_TRIP.destination.name}. Next checkpoint: {driverVehicle?.rerouteFromLabel || 'Nagaon Junction'}.
+                    <p className="text-sm text-emerald-900 mt-1 font-medium">
+                      No active road closures on route to {driverVehicle?.destination || DEMO_TRIP.destination.name}. Next checkpoint: {driverVehicle?.rerouteFromLabel || 'Nagaon Junction'}.
                     </p>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-2 shrink-0">
                   <Button
-                    size="sm"
+                    size="md"
                     variant="primary"
                     onClick={() => navigate('/driver/navigation')}
-                    iconLeft={<Navigation className="w-3.5 h-3.5" />}
+                    iconLeft={<Navigation className="w-4 h-4" />}
+                    className="bg-emerald-600 hover:bg-emerald-700 text-white cursor-pointer font-bold shadow-xs"
                   >
-                    Open Navigation View
+                    Start Live Navigation
                   </Button>
                 </div>
               </motion.div>
@@ -390,36 +388,36 @@ export function DriverDashboard() {
         </div>
 
         {/* Focused Journey Console Panel */}
-        <div className="w-full lg:w-88 xl:w-96 bg-white overflow-y-auto shrink-0 flex flex-col divide-y divide-[#e4e4e3]">
+        <div className="w-full lg:w-96 xl:w-[410px] bg-white overflow-y-auto shrink-0 flex flex-col divide-y divide-[#e4e4e7]">
           {/* Section 1: Immediate Journey Progress */}
-          <div className="p-4 space-y-3 bg-[#fafaf9]">
+          <div className="p-5 space-y-3 bg-[#fafafa]">
             <div className="flex items-center justify-between">
-              <span className="text-[10px] font-bold text-[#8a8a87] uppercase tracking-wider">
+              <span className="text-xs font-bold text-[#71717a] uppercase tracking-wider">
                 Current Journey State
               </span>
-              <span className="text-[10px] font-semibold px-2 py-0.5 rounded bg-white border border-[#e4e4e3] text-[#1a1a19]">
+              <span className="text-xs font-bold px-2.5 py-1 rounded-lg bg-white border border-[#e4e4e7] text-[#18181b] shadow-2xs">
                 {isRerouted ? 'Detour Active' : isDisrupted ? 'Disrupted' : 'On Route'}
               </span>
             </div>
 
-            <div className="p-3.5 rounded-xl bg-white border border-[#e4e4e3] shadow-xs space-y-3">
+            <div className="p-4 rounded-2xl bg-white border border-[#e4e4e7] shadow-xs space-y-3">
               <div className="flex items-baseline justify-between">
                 <div>
-                  <span className="text-[10px] text-[#8a8a87] uppercase font-bold">Estimated Arrival</span>
-                  <p className="text-xl font-bold text-[#1a1a19] tracking-tight">{formatEta(displayEta)}</p>
+                  <span className="text-xs text-[#71717a] uppercase font-bold tracking-wider">Estimated Arrival</span>
+                  <p className="text-2xl font-bold text-[#18181b] tracking-tight mt-0.5">{formatEta(displayEta)}</p>
                 </div>
                 <div className="text-right">
-                  <span className="text-[10px] text-[#8a8a87] uppercase font-bold">Total Distance</span>
-                  <p className="text-sm font-semibold text-[#5a5a57]">{activeRoute.distanceKm} km</p>
+                  <span className="text-xs text-[#71717a] uppercase font-bold tracking-wider">Total Distance</span>
+                  <p className="text-base font-bold text-[#3f3f46] mt-0.5">{activeRoute.distanceKm} km</p>
                 </div>
               </div>
 
-              <div className="pt-2 border-t border-[#f4f4f3] flex items-center justify-between text-xs text-[#5a5a57]">
-                <span className="flex items-center gap-1.5">
-                  <Truck className="w-3.5 h-3.5 text-[#2563eb]" />
+              <div className="pt-3 border-t border-[#f4f4f5] flex items-center justify-between text-xs text-[#52525b]">
+                <span className="flex items-center gap-1.5 font-medium">
+                  <Truck className="w-4 h-4 text-blue-600" />
                   <span>Current Checkpoint:</span>
                 </span>
-                <span className="font-semibold text-[#1a1a19]">
+                <span className="font-bold text-[#18181b]">
                   {driverVehicle?.rerouteFromLabel || (driverVehicle?.status === 'idle' ? `${driverVehicle?.origin || 'Guwahati'} Hub (Staged)` : 'En Route Corridor')}
                 </span>
               </div>
@@ -427,89 +425,89 @@ export function DriverDashboard() {
           </div>
 
           {/* Section 2: Consignment & Cold-Chain */}
-          <div className="p-4 space-y-2.5">
+          <div className="p-5 space-y-3">
             <div className="flex items-center justify-between">
-              <span className="text-[10px] font-bold text-[#8a8a87] uppercase tracking-wider flex items-center gap-1.5">
-                <Package className="w-3.5 h-3.5 text-[#5a5a57]" />
+              <span className="text-xs font-bold text-[#71717a] uppercase tracking-wider flex items-center gap-1.5">
+                <Package className="w-4 h-4 text-[#52525b]" />
                 Cargo & Cold Chain
               </span>
-              <span className="text-[10px] font-bold text-[#16a34a] flex items-center gap-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#16a34a]" />
+              <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200 flex items-center gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-600" />
                 Nominal
               </span>
             </div>
 
-            <div className="p-3 rounded-lg bg-[#f8f8f7] border border-[#e4e4e3] space-y-2 text-xs">
+            <div className="p-3.5 rounded-xl bg-[#f8f8f7] border border-[#e4e4e7] space-y-2.5 text-xs">
               <div className="flex items-center justify-between">
-                <span className="text-[#8a8a87]">Consignment:</span>
-                <span className="font-semibold text-[#1a1a19]">{driverVehicle?.cargoType || DEMO_TRIP.cargo.type}</span>
+                <span className="text-[#71717a] font-medium">Consignment:</span>
+                <span className="font-bold text-[#18181b]">{driverVehicle?.cargoType || DEMO_TRIP.cargo.type}</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-[#8a8a87] flex items-center gap-1">
-                  <Thermometer className="w-3.5 h-3.5 text-[#2563eb]" />
+                <span className="text-[#71717a] font-medium flex items-center gap-1">
+                  <Thermometer className="w-4 h-4 text-blue-600" />
                   Cargo Temp:
                 </span>
-                <span className="font-bold text-[#2563eb]">
+                <span className="font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded border border-blue-200">
                   {driverVehicle?.type.includes('Refrigerated') || driverVehicle?.cargoType?.includes('Vaccines') || driverVehicle?.cargoType?.includes('Pharma')
                     ? '4.2 °C (Cold Chain)'
                     : 'Ambient Controlled'}
                 </span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-[#8a8a87]">Vehicle Type:</span>
-                <span className="font-medium text-[#1a1a19]">{driverVehicle?.type || 'Refrigerated Truck'}</span>
+                <span className="text-[#71717a] font-medium">Vehicle Type:</span>
+                <span className="font-semibold text-[#18181b]">{driverVehicle?.type || 'Refrigerated Truck'}</span>
               </div>
             </div>
           </div>
 
-          {/* Section 3: Mountain Pass & Terrain Context */}
-          <div className="p-4 space-y-2.5">
+          {/* Section 3: Mountain Pass & Weather Context */}
+          <div className="p-5 space-y-3">
             <div className="flex items-center justify-between">
-              <span className="text-[10px] font-bold text-[#8a8a87] uppercase tracking-wider flex items-center gap-1.5">
-                <Mountain className="w-3.5 h-3.5 text-[#5a5a57]" />
+              <span className="text-xs font-bold text-[#71717a] uppercase tracking-wider flex items-center gap-1.5">
+                <Mountain className="w-4 h-4 text-[#52525b]" />
                 Mountain Corridor Status
               </span>
-              <span className="text-[10px] text-[#8a8a87]">Mao Pass Corridor</span>
+              <span className="text-xs font-semibold text-[#71717a]">Mao Pass Corridor</span>
             </div>
 
-            <div className="grid grid-cols-3 gap-2 text-center text-xs">
-              <div className="p-2 rounded-lg bg-[#f8f8f7] border border-[#e4e4e3]">
-                <CloudRain className="w-4 h-4 mx-auto text-[#2563eb] mb-1" />
-                <p className="text-[10px] text-[#8a8a87]">Precipitation</p>
-                <p className="font-bold text-[#1a1a19]">3.5 mm/h</p>
+            <div className="grid grid-cols-3 gap-2.5 text-center text-xs">
+              <div className="p-3 rounded-xl bg-[#f8f8f7] border border-[#e4e4e7]">
+                <CloudRain className="w-5 h-5 mx-auto text-blue-600 mb-1" />
+                <p className="text-[11px] text-[#71717a] font-medium">Precipitation</p>
+                <p className="font-bold text-[#18181b] text-sm mt-0.5">3.5 mm/h</p>
               </div>
-              <div className="p-2 rounded-lg bg-[#f8f8f7] border border-[#e4e4e3]">
-                <Eye className="w-4 h-4 mx-auto text-[#d97706] mb-1" />
-                <p className="text-[10px] text-[#8a8a87]">Visibility</p>
-                <p className="font-bold text-[#1a1a19]">6.2 km</p>
+              <div className="p-3 rounded-xl bg-[#f8f8f7] border border-[#e4e4e7]">
+                <Eye className="w-5 h-5 mx-auto text-amber-600 mb-1" />
+                <p className="text-[11px] text-[#71717a] font-medium">Visibility</p>
+                <p className="font-bold text-[#18181b] text-sm mt-0.5">6.2 km</p>
               </div>
-              <div className="p-2 rounded-lg bg-[#f8f8f7] border border-[#e4e4e3]">
-                <Mountain className="w-4 h-4 mx-auto text-[#5a5a57] mb-1" />
-                <p className="text-[10px] text-[#8a8a87]">Pass Elevation</p>
-                <p className="font-bold text-[#1a1a19]">1,650 m</p>
+              <div className="p-3 rounded-xl bg-[#f8f8f7] border border-[#e4e4e7]">
+                <Mountain className="w-5 h-5 mx-auto text-[#52525b] mb-1" />
+                <p className="text-[11px] text-[#71717a] font-medium">Elevation</p>
+                <p className="font-bold text-[#18181b] text-sm mt-0.5">1,650 m</p>
               </div>
             </div>
           </div>
 
           {/* Section 4: Upcoming Highway Segments */}
-          <div className="p-4 space-y-2">
-            <span className="text-[10px] font-bold text-[#8a8a87] uppercase tracking-wider">
+          <div className="p-5 space-y-2.5">
+            <span className="text-xs font-bold text-[#71717a] uppercase tracking-wider">
               Corridor Segments Ahead
             </span>
-            <div className="space-y-1.5">
+            <div className="space-y-2">
               {roadSegments.slice(0, 3).map((seg) => (
-                <div key={seg.id} className="p-2 rounded-lg border border-[#e4e4e3] flex items-center justify-between text-xs">
+                <div key={seg.id} className="p-3 rounded-xl border border-[#e4e4e7] bg-white flex items-center justify-between text-xs shadow-2xs">
                   <div>
-                    <p className="font-medium text-[#1a1a19]">{seg.name}</p>
-                    <p className="text-[10px] text-[#8a8a87]">{seg.fromLocation} → {seg.toLocation}</p>
+                    <p className="font-bold text-[#18181b]">{seg.name}</p>
+                    <p className="text-[11px] text-[#71717a] font-medium mt-0.5">{seg.fromLocation} → {seg.toLocation}</p>
                   </div>
                   <span
-                    className={`px-1.5 py-0.5 rounded text-[10px] font-bold uppercase ${
+                    className={`px-2 py-0.5 rounded-lg text-xs font-bold uppercase ${
                       seg.status === 'blocked'
-                        ? 'bg-[#fef2f2] text-[#991b1b] border border-[#fecaca]'
+                        ? 'bg-rose-50 text-rose-800 border border-rose-200'
                         : seg.status === 'caution'
-                          ? 'bg-[#fffbeb] text-[#d97706] border border-[#fde68a]'
-                          : 'bg-[#f0fdf4] text-[#166534] border border-[#bbf7d0]'
+                          ? 'bg-amber-50 text-amber-800 border border-amber-200'
+                          : 'bg-emerald-50 text-emerald-800 border border-emerald-200'
                     }`}
                   >
                     {seg.status}
@@ -520,13 +518,15 @@ export function DriverDashboard() {
           </div>
 
           {/* Section 5: Offline Resilience Status */}
-          <div className="p-4 bg-[#fafaf9] mt-auto">
-            <div className="flex items-center gap-2 text-xs text-[#5a5a57]">
-              <Database className="w-3.5 h-3.5 text-[#16a34a]" />
-              <span className="font-medium">IndexedDB Local Cache Active</span>
+          <div className="p-5 bg-[#fafafa]">
+            <div className="flex items-center gap-2.5 text-xs text-[#52525b]">
+              <Database className="w-4 h-4 text-emerald-600 shrink-0" />
+              <span className="font-medium">
+                Offline Cache: <strong className="text-[#18181b]">Active & Ready</strong> (Map tiles & emergency shelters stored on device)
+              </span>
             </div>
-            <p className="text-[11px] text-[#8a8a87] mt-0.5 leading-snug">
-              Route profiles and emergency waypoints stored locally for offline mountain passes.
+            <p className="text-[11px] text-[#71717a] mt-1">
+              Route corridors & SOS numbers function seamlessly even when mobile towers lose signal in mountain passes.
             </p>
           </div>
         </div>
