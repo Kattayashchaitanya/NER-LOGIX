@@ -8,7 +8,7 @@ import { Notification } from '@/components/ui/Notification';
 import { MapContainer } from '@/components/map/MapContainer';
 import { useAppStore } from '@/store/appStore';
 import { useNavigate } from 'react-router-dom';
-import { Package, Thermometer, ChevronRight, ShieldCheck, MapPin, Loader2, Download, CheckCircle, Navigation } from 'lucide-react';
+import { Package, Thermometer, ChevronRight, ShieldCheck, Loader2, Navigation } from 'lucide-react';
 
 type PrepState = 'idle' | 'preparing' | 'saving' | 'ready';
 

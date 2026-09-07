@@ -3,7 +3,7 @@ import { MapContainer } from '@/components/map/MapContainer';
 import { MetricCard } from '@/components/ui/MetricCard';
 import { RiskBadge } from '@/components/ui/RiskBadge';
 import { StatusBadge } from '@/components/ui/StatusBadge';
-import { DEMO_INCIDENTS, DEMO_ROAD_SEGMENTS, DEMO_METRICS, DEMO_CORRIDORS, DEMO_INCIDENTS as incidents } from '@/data/demo';
+import { DEMO_INCIDENTS, DEMO_ROAD_SEGMENTS, DEMO_METRICS, DEMO_CORRIDORS } from '@/data/demo';
 import { formatTimeAgo, getIncidentTypeLabel } from '@/utils';
 import { ShieldCheck, AlertTriangle, Map, FileCheck, Activity } from 'lucide-react';
 

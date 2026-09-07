@@ -20,6 +20,40 @@ import {
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
+interface NetworkStateDisplayProps {
+  networkStatus: 'online' | 'offline' | 'syncing';
+  pendingIncidentsCount: number;
+}
+
+function NetworkStateDisplay({ networkStatus, pendingIncidentsCount }: NetworkStateDisplayProps) {
+  const configs = {
+    online: { icon: <Wifi className="w-4 h-4" />, label: 'Network Connected', color: 'text-[#16a34a]', bg: 'bg-[#f0fdf4]' },
+    offline: { icon: <WifiOff className="w-4 h-4" />, label: 'Network Unavailable — Offline Mode', color: 'text-[#dc2626]', bg: 'bg-[#fef2f2]' },
+    syncing: { icon: <RefreshCw className="w-4 h-4 animate-spin" />, label: 'Reconnected — Synchronizing...', color: 'text-[#d97706]', bg: 'bg-[#fffbeb]' },
+  };
+  const cfg = configs[networkStatus];
+  return (
+    <AnimatePresence mode="wait">
+      <motion.div
+        key={networkStatus}
+        initial={{ opacity: 0, y: -4 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: 4 }}
+        transition={{ duration: 0.2 }}
+        className={`flex items-center gap-2 px-3 py-1.5 rounded text-xs font-medium ${cfg.color} ${cfg.bg}`}
+      >
+        {cfg.icon}
+        {cfg.label}
+        {pendingIncidentsCount > 0 && networkStatus === 'offline' && (
+          <span className="ml-2 px-1.5 py-0.5 bg-[#dc2626] text-white rounded-full text-[10px]">
+            {pendingIncidentsCount} pending
+          </span>
+        )}
+      </motion.div>
+    </AnimatePresence>
+  );
+}
+
 export function NavigationView() {
   const { networkStatus, setNetworkStatus, selectedRouteId, pendingIncidentsCount, setPendingIncidentsCount } = useAppStore();
   const navigate = useNavigate();
@@ -81,35 +115,6 @@ export function NavigationView() {
     }, 2500);
   };
 
-  const NetworkStateDisplay = () => {
-    const configs = {
-      online: { icon: <Wifi className="w-4 h-4" />, label: 'Network Connected', color: 'text-[#16a34a]', bg: 'bg-[#f0fdf4]' },
-      offline: { icon: <WifiOff className="w-4 h-4" />, label: 'Network Unavailable — Offline Mode', color: 'text-[#dc2626]', bg: 'bg-[#fef2f2]' },
-      syncing: { icon: <RefreshCw className="w-4 h-4 animate-spin" />, label: 'Reconnected — Synchronizing...', color: 'text-[#d97706]', bg: 'bg-[#fffbeb]' },
-    };
-    const cfg = configs[networkStatus];
-    return (
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={networkStatus}
-          initial={{ opacity: 0, y: -4 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 4 }}
-          transition={{ duration: 0.2 }}
-          className={`flex items-center gap-2 px-3 py-1.5 rounded text-xs font-medium ${cfg.color} ${cfg.bg}`}
-        >
-          {cfg.icon}
-          {cfg.label}
-          {pendingIncidentsCount > 0 && networkStatus === 'offline' && (
-            <span className="ml-2 px-1.5 py-0.5 bg-[#dc2626] text-white rounded-full text-[10px]">
-              {pendingIncidentsCount} pending
-            </span>
-          )}
-        </motion.div>
-      </AnimatePresence>
-    );
-  };
-
   return (
     <div className="h-full flex flex-col">
       {/* Header */}
@@ -129,7 +134,7 @@ export function NavigationView() {
         </div>
 
         <div className="flex items-center gap-2">
-          <NetworkStateDisplay />
+          <NetworkStateDisplay networkStatus={networkStatus} pendingIncidentsCount={pendingIncidentsCount} />
           {networkStatus === 'online' ? (
             <Button size="sm" variant="ghost" onClick={simulateOffline} iconLeft={<WifiOff className="w-3.5 h-3.5" />}>
               Simulate Offline

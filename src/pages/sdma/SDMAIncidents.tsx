@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { DEMO_INCIDENTS } from '@/data/demo';
-import type { Incident } from '@/types';
 import { useNetworkStore } from '@/store/networkStore';
 import { StatusBadge } from '@/components/ui/StatusBadge';
 import { RiskBadge } from '@/components/ui/RiskBadge';

@@ -1,7 +1,5 @@
-import { motion } from 'framer-motion';
 import { DEMO_DRIVER, DEMO_TRIP, DEMO_METRICS } from '@/data/demo';
 import { MetricCard } from '@/components/ui/MetricCard';
-import { RiskBadge } from '@/components/ui/RiskBadge';
 import { StatusBadge } from '@/components/ui/StatusBadge';
 import { Button } from '@/components/ui/Button';
 import { MapContainer } from '@/components/map/MapContainer';
@@ -12,7 +10,6 @@ import {
   MapPin,
   Package,
   Thermometer,
-  Clock,
   Navigation,
   AlertTriangle,
   Signal,

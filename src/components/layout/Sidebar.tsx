@@ -46,17 +46,10 @@ const navItems: Record<UserRole, NavItem[]> = {
   ],
 };
 
-const roleConfig: Record<UserRole, { label: string; color: string; bg: string }> = {
-  driver: { label: 'Driver', color: 'text-[#1e40af]', bg: 'bg-[#eff6ff]' },
-  dispatcher: { label: 'Dispatcher', color: 'text-[#9a3412]', bg: 'bg-[#fff7ed]' },
-  sdma: { label: 'Govt / SDMA', color: 'text-[#166534]', bg: 'bg-[#f0fdf4]' },
-};
-
 export function Sidebar() {
   const { role, sidebarCollapsed } = useAppStore();
   const location = useLocation();
   const items = navItems[role];
-  const rc = roleConfig[role];
 
   return (
     <AnimatePresence initial={false}>
